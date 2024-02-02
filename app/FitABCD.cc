@@ -27,7 +27,7 @@ std::vector <float> xbins_time;
 
 bool useBDT = false;
 
-float lumi = 31950; //pb^-1
+float lumi = 31947; //pb^-1
 float NEvents_sig = 1.0;
 bool _useToy = true;
 
@@ -41,8 +41,8 @@ bool doAllBkgFracFit = false;
 int BIN_CATEGORY = 0;
 
 //// Optimized binning for 2 photons
-float time_split_by_CAT[7] = {0.5,  0.5,   1.5,   0.5,   0.5,   1.5,   1.5};
-float met_split_by_CAT[7] = {150.0, 150.0, 150.0, 200.0, 200.0, 200.0, 200.0};
+float time_split_by_CAT[7] = {0.5,  1.5,   0.5,   1.5,   0.5,   1.5,};
+float met_split_by_CAT[7] = {150.0, 150.0, 150.0, 150.0, 200.0, 200.0};
 
 // Optimized binning for 1 photon
 //float time_split_by_CAT[7] = {0.5,  0.5,   1.5,   0.5,   0.5,   1.5,   1.5};
@@ -105,28 +105,28 @@ float SoverB = 0.0;
 int nToys = 1000;
 
 //assign binning category:
-if (sigModelName.find("L100TeV") != std::string::npos || 
-        sigModelName.find("L150TeV") != std::string::npos || 
-        sigModelName.find("L200TeV") != std::string::npos || 
-        sigModelName.find("L250TeV") != std::string::npos|| 
-        sigModelName.find("L300TeV") != std::string::npos)
+if (sigModelName.find("L100TeV") != std::string::npos ||
+		sigModelName.find("L150TeV") != std::string::npos ||
+		sigModelName.find("L200TeV") != std::string::npos ||
+		sigModelName.find("L250TeV") != std::string::npos)
 {
-    if (sigModelName.find("Ctau0_001cm") != std::string::npos || 
-            sigModelName.find("Ctau0_1cm") != std::string::npos || 
-            sigModelName.find("Ctau1cm") != std::string::npos) BIN_CATEGORY = 0;
-    else if (sigModelName.find("Ctau10cm") != std::string::npos) BIN_CATEGORY = 1;
-    else BIN_CATEGORY = 2;
+	if (sigModelName.find("Ctau10cm") != std::string::npos) BIN_CATEGORY = 0;
+	else BIN_CATEGORY = 1;
+}
+else if (sigModelName.find("L300TeV") != std::string::npos)
+{
+	if (sigModelName.find("Ctau10cm") != std::string::npos ||
+			sigModelName.find("Ctau50cm") != std::string::npos) BIN_CATEGORY = 2;
+	else BIN_CATEGORY = 3;
 }
 else
 {
-    if (sigModelName.find("Ctau0_001cm") != std::string::npos || 
-            sigModelName.find("Ctau0_1cm") != std::string::npos || 
-            sigModelName.find("Ctau1cm") != std::string::npos) BIN_CATEGORY = 3;
-    else if (sigModelName.find("Ctau10cm") != std::string::npos ) BIN_CATEGORY = 4;
-    else BIN_CATEGORY = 5;
+	if (sigModelName.find("Ctau10cm") != std::string::npos ||
+			sigModelName.find("Ctau50cm") != std::string::npos) BIN_CATEGORY = 4;
+	else BIN_CATEGORY = 5;
 }
 
-if (sigModelName.find("L100TeV") != std::string::npos && sigModelName.find("Ctau10000cm") != std::string::npos) BIN_CATEGORY = 6;
+if (sigModelName.find("L100TeV") != std::string::npos && sigModelName.find("Ctau10000cm") != std::string::npos) BIN_CATEGORY = 5;
 
 TString _sigModelName (sigModelName.c_str());
 TString _sigModelTitle (sigModelTitle.c_str());
@@ -673,7 +673,7 @@ if(binningAlgorithm == "limit" && fitMode == "binAndDatacard")
 	OptimizeBinningABCDLimits(Nbins_MET, Nbins_time, timeBin, metBin, h2finebinData, h2finebinSig, h2finebinData, h1finebinData_Time, h1finebinData_MET, _sigModelName, outBinningDir, true);
 	
 	cout<<"optimized met and time bin:-----------"<<endl;
-    std::string outfile = "/storage/af/user/yeseo/DelayedPhoton/CMSSW_8_1_0/src/HiggsAnalysis/DelayedPhotonLimit/fit_results/2018D/"+category+"/"+sigModelName+".txt";
+    std::string outfile = "~/CMSSW_8_1_0/src/HiggsAnalysis/DelayedPhotonLimit/fit_results/2018D/"+category+"/"+sigModelName+".txt";
     cout<<"Writing to " << outfile <<endl;
     ofstream myfile;
     myfile.open(outfile);
@@ -902,10 +902,10 @@ for(int iT=1; iT<=Nbins_time; iT++)
 {
         for(int iM=1; iM<=Nbins_MET; iM++)
         {
-                h2_lumi_sys_Sig_inBins->SetBinContent(iT, iM, 1.023);
+                h2_lumi_sys_Sig_inBins->SetBinContent(iT, iM, 1.025);
                 h2_PhotonScale_sys_Sig_inBins->SetBinContent(iT, iM, 1.02);
                 h2_PhotonSmear_sys_Sig_inBins->SetBinContent(iT, iM, 1.01);
-                h2_EGMVID_SF_sys_Sig_inBins->SetBinContent(iT, iM, 1.030);
+                h2_EGMVID_SF_sys_Sig_inBins->SetBinContent(iT, iM, 1.050);
                 h2_TriggerEff_SF_sys_Sig_inBins->SetBinContent(iT, iM, 1.00);
                 h2_JetEScale_sys_Sig_inBins->SetBinContent(iT, iM, 1.02);
                 h2_JetESmear_sys_Sig_inBins->SetBinContent(iT, iM, 1.015);
